@@ -1,0 +1,29 @@
+import express from "express";
+import connectDB from "./config/dbConfig.js";
+import { PORT } from "./config/serverConfig.js";
+import apiRouter from "./routers/apiRouter.js";
+
+const app = express();
+
+app.use(express.json());
+app.use(express.text());
+app.use(express.urlencoded({ extended: true }));
+
+// API routes
+app.use("/api", apiRouter);
+
+// Health check
+app.get("/", (req, res) => res.send("careerHub API is running"));
+
+// ✅ ERROR HANDLING MIDDLEWARE
+app.use((err, req, res, next) => {
+  console.error("Error handler:", err);
+  res.status(err.status || 500).json({
+    message: err.message || "Internal server error",
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+  connectDB();
+});
