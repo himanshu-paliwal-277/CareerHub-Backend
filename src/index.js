@@ -2,12 +2,28 @@ import express from "express";
 import connectDB from "./config/dbConfig.js";
 import { PORT } from "./config/serverConfig.js";
 import apiRouter from "./routers/apiRouter.js";
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
+
+const allowedOrigins = ["http://localhost:3000"];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 // API routes
 app.use("/api", apiRouter);

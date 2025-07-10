@@ -8,10 +8,15 @@ export async function signup(req, res) {
     const user = await signupUserService(req.body);
     if (user) {
       console.log("signin user");
-      return res.status(200).json({
+      return res.status(201).json({
         success: true,
         message: "User created successfully",
-        data: user,
+        data: {
+          userId: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
       });
     }
   } catch (error) {
@@ -32,7 +37,6 @@ export async function signup(req, res) {
 export async function signin(req, res) {
   try {
     const response = await signinUserService(req.body);
-    console.log("response = ", response);
     return res.status(200).json({
       success: true,
       message: "User signed in successfully",

@@ -9,10 +9,11 @@ export const signupUserService = async (user) => {
     return newUser;
   } catch (error) {
     if (error.name === "MongoServerError" && error.code === 11000) {
-      throw {
-        status: 400,
-        message: "User with the same email or username already exists",
-      };
+      const errorObj = new Error(
+        "User with the same email or name already exists"
+      );
+      errorObj.status = 400;
+      throw errorObj;
     }
     throw error;
   }
@@ -44,12 +45,17 @@ export const signinUserService = async (userDetails) => {
 
     const token = generateJwtToken({
       _id: user._id,
-      username: user.userName,
+      name: user.name,
       email: user.email,
       role: user.role || "user",
     });
 
-    return token;
+    return {
+      userId: user._id,
+      name: user.name,
+      email: user.email,
+      token: token,
+    };
   } catch (error) {
     console.log(error);
     throw error;

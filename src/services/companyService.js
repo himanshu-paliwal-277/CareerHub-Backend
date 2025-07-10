@@ -5,12 +5,6 @@ import {
 } from "../repository/company.js";
 
 export const createCompanyService = async (createCompanyObject) => {
-  for (const key in createCompanyObject) {
-    if (typeof createCompanyObject[key] === "string") {
-      createCompanyObject[key] = createCompanyObject[key]?.trim();
-    }
-  }
-
   const company = await createCompany(createCompanyObject);
   if (!company) {
     const error = new Error("company already exists");
