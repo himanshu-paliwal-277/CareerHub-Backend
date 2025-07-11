@@ -4,10 +4,14 @@ const ApplicationSchema = new mongoose.Schema(
   {
     company: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Company",
+      ref: "companies",
       required: true,
     },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
     status: {
       type: String,
       enum: [
