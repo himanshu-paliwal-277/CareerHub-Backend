@@ -4,6 +4,7 @@ import {
   getAllApplicationByUserId,
   getApplicationById,
   getApplicationInCompany,
+  updateApplicationById,
 } from "../repository/application.js";
 
 export const createApplicationService = async (applicationData) => {
@@ -46,6 +47,16 @@ export const getApplicationInCompanyService = async (companyId, userId) => {
 export const getApplicationService = async (id) => {
   try {
     const application = await getApplicationById(id);
+    return application;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const updateApplicationService = async (id, updatedApplication) => {
+  try {
+    const application = await updateApplicationById(id, updatedApplication);
     return application;
   } catch (error) {
     console.log(error);

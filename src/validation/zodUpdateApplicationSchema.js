@@ -1,12 +1,6 @@
 import { z } from "zod";
 
-export const zodApplicationSchema = z.object({
-  company: z
-    .string({
-      required_error: "Company ID is required",
-    })
-    .length(24, { message: "Invalid Company ObjectId" }),
-
+export const zodUpdateApplicationSchema = z.object({
   status: z.enum(
     ["Not Applied", "Applied", "Shortlisted", "Interview", "Offer", "Rejected"],
     {
@@ -26,5 +20,5 @@ export const zodApplicationSchema = z.object({
     .string({
       required_error: "Notes are required",
     })
-    .min(1, { message: "Notes cannot be empty" }),
+    .min(1, "Notes cannot be empty"),
 });

@@ -58,3 +58,15 @@ export const getApplicationById = async (id) => {
     return application;
   } catch (error) {}
 };
+
+export const updateApplicationById = async (id, updatedApplication) => {
+  try {
+    const application = await Application.findByIdAndUpdate(
+      id,
+      updatedApplication
+    );
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
