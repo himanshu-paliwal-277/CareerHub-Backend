@@ -17,10 +17,10 @@ export const createCompanyService = async (createCompanyObject) => {
   return company;
 };
 
-export const findAllCompanyService = async (page, limit) => {
-  const companies = await findAllCompanies(page, limit);
-  const totalCompanies = await countTotalCompanies();
-  const totalPage = Math.ceil(totalCompanies / limit);
+export const findAllCompanyService = async (query) => {
+  const companies = await findAllCompanies(query);
+  const totalCompanies = await countTotalCompanies(query);
+  const totalPage = Math.ceil(totalCompanies / query.limit);
 
   return {
     companies: companies,

@@ -20,8 +20,8 @@ router.post(
   createCompanyController
 );
 
-router.get("/", findAllCompanyController);
-router.get("/:id", getCompanyController);
+router.get("/", isAuthenticated, findAllCompanyController);
+router.get("/:id", isAuthenticated, getCompanyController);
 router.delete("/:id", isAuthenticated, deleteCompanyController);
 router.put(
   "/:id",

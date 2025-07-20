@@ -1,4 +1,6 @@
 import Company from "../schema/company.js";
+import { buildCompanyAggregationPipeline } from "../utils/companyAggregation.js";
+import { buildCompanyCountAggregation } from "../utils/filteredCompanyAggregation.js";
 
 export const createCompany = async (companyData) => {
   try {
@@ -10,39 +12,29 @@ export const createCompany = async (companyData) => {
   }
 };
 
-export const findAllCompanies = async (page, limit) => {
+export const findAllCompanies = async (query) => {
   try {
-    const companies = await Company.find()
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .populate({
-        path: "createdBy",
-        select: "name email",
-      });
-
-    // const companies = await Company.aggregate([
-    //   {
-    //     $lookup: {
-    //       from: "users",
-    //       localField: "createdBy",
-    //       foreignField: "_id",
-    //       as: "userDetails",
-    //     },
-    //   },
-    //   { $unwind: "$userDetails" },
-    // ]);
+    const pipeline = buildCompanyAggregationPipeline(query);
+    const companies = await Company.aggregate(pipeline);
     return companies;
   } catch (error) {
-    console.log(error);
+    console.error("Error in findAllCompanies:", error);
     throw error;
   }
 };
 
-export const countTotalCompanies = async () => {
+export const countTotalCompanies = async (query) => {
   try {
-    const totalCompanies = await Company.countDocuments();
-    return totalCompanies;
+    const pipeline = buildCompanyCountAggregation({
+      search: query.search || "",
+      location: query.location || "",
+      tags: query.tags || [],
+    });
+
+    pipeline.push({ $count: "total" });
+
+    const result = await Company.aggregate(pipeline);
+    return result[0]?.total || 0;
   } catch (error) {
     console.log(error);
     throw error;

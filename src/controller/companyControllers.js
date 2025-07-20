@@ -44,7 +44,24 @@ export const findAllCompanyController = async (req, res) => {
   try {
     const page = req.query.page || 1;
     const limit = req.query.limit || 10;
-    const paginatedCompany = await findAllCompanyService(page, limit);
+    const search = req.query.search || "";
+    const location = req.query.location || "";
+    const sortBy = req.query.sortBy || "createdAt";
+    const sortOrder = req.query.sortOrder || "desc";
+    const tags = req.query.tags ? req.query.tags.split(",") : [];
+
+    const query = {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      search,
+      location,
+      sortBy,
+      sortOrder,
+      tags,
+      userId: req.user._id,
+    };
+
+    const paginatedCompany = await findAllCompanyService(query);
     return res.status(200).json({
       success: true,
       message: "company fetch successfully",
