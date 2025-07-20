@@ -30,11 +30,13 @@ export const getAllApplicationController = async (req, res) => {
   try {
     const page = req.query.page || 1;
     const limit = req.query.limit || 10;
+    const status = req.query.status || "All";
     const userId = req.user._id;
     const paginatedApplication = await getAllApplicationService(
       userId,
       page,
-      limit
+      limit,
+      status
     );
     return res.status(200).json({
       success: true,
@@ -72,6 +74,7 @@ export const getApplicationInCompanyController = async (req, res) => {
 export const getApplicationController = async (req, res) => {
   try {
     const applicationId = req.params.id;
+    console.log("application id = ", applicationId);
     const application = await getApplicationService(applicationId);
     return res.status(200).json({
       success: true,

@@ -19,6 +19,7 @@ const ApplicationSchema = new mongoose.Schema(
         "Applied",
         "Shortlisted",
         "Interview",
+        "Cleared",
         "Offer",
         "Rejected",
       ],

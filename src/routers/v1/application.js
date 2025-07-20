@@ -20,8 +20,17 @@ router.post(
   createApplicationController
 );
 router.get("/", isAuthenticated, getAllApplicationController);
-router.get("/:companyId/", isAuthenticated, getApplicationInCompanyController);
-router.get("/id", isAuthenticated, getApplicationController);
-router.put("/:id", isAuthenticated, validate(zodUpdateApplicationSchema), updateApplicationController);
+router.get(
+  "/company/:companyId",
+  isAuthenticated,
+  getApplicationInCompanyController
+);
+router.get("/:id", isAuthenticated, getApplicationController);
+router.put(
+  "/:id",
+  isAuthenticated,
+  validate(zodUpdateApplicationSchema),
+  updateApplicationController
+);
 
 export default router;

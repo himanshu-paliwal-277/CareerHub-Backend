@@ -17,10 +17,15 @@ export const createApplicationService = async (applicationData) => {
   }
 };
 
-export const getAllApplicationService = async (userId, page, limit) => {
+export const getAllApplicationService = async (userId, page, limit, status) => {
   try {
-    const applications = await getAllApplicationByUserId(userId, page, limit);
-    const totalApplications = await countTotalApplications(userId);
+    const applications = await getAllApplicationByUserId(
+      userId,
+      page,
+      limit,
+      status
+    );
+    const totalApplications = await countTotalApplications(userId, status);
     const totalPage = Math.ceil(totalApplications / limit);
 
     return {

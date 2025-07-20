@@ -10,9 +10,17 @@ export const createApplication = async (applicationData) => {
   }
 };
 
-export const getAllApplicationByUserId = async (userId, page, limit) => {
+export const getAllApplicationByUserId = async (
+  userId,
+  page,
+  limit,
+  status
+) => {
   try {
-    const applications = await Application.find({ user: userId })
+    const applications = await Application.find({
+      user: userId,
+      status: status !== "All" ? status : { $exists: true },
+    })
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
@@ -40,10 +48,11 @@ export const getApplicationInCompany = async (companyId, userId) => {
   }
 };
 
-export const countTotalApplications = async (userId) => {
+export const countTotalApplications = async (userId, status) => {
   try {
     const totalApplications = await Application.countDocuments({
       user: userId,
+      status: status !== "All" ? status : { $exists: true },
     });
     return totalApplications;
   } catch (error) {
@@ -54,9 +63,12 @@ export const countTotalApplications = async (userId) => {
 
 export const getApplicationById = async (id) => {
   try {
-    const application = await Application.findOne(id);
+    const application = await Application.findOne({ _id: id });
     return application;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 export const updateApplicationById = async (id, updatedApplication) => {
