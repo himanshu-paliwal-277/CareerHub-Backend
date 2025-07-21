@@ -4,6 +4,7 @@ import {
   deleteCompanyById,
   findAllCompanies,
   getCompanyById,
+  getTotalCompaniesCount,
   updateCompanyById,
 } from "../repository/company.js";
 
@@ -73,6 +74,17 @@ export const updateCompanyService = async (id, updatedCompany) => {
     return response;
   } catch (error) {
     console.error("Error in updateCompanyService:", error);
+    throw error;
+  }
+};
+
+
+export const countTotalCompaniesService = async () => {
+  try {
+    const totalCompanies = await getTotalCompaniesCount();
+    return totalCompanies;
+  } catch (error) {
+    console.error("Error in countTotalCompaniesService:", error);
     throw error;
   }
 };

@@ -1,6 +1,7 @@
 import express from "express";
 import { isAuthenticated } from "../../middleware/authMiddleware.js";
 import {
+  countTotalCompaniesController,
   createCompanyController,
   deleteCompanyController,
   findAllCompanyController,
@@ -20,6 +21,7 @@ router.post(
   createCompanyController
 );
 
+router.get("/totalCount", isAuthenticated, countTotalCompaniesController);
 router.get("/", isAuthenticated, findAllCompanyController);
 router.get("/:id", isAuthenticated, getCompanyController);
 router.delete("/:id", isAuthenticated, deleteCompanyController);

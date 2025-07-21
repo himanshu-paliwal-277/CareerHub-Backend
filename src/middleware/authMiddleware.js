@@ -2,12 +2,13 @@ import { checkIfUserExists } from "../services/userService.js";
 import { verifyToken } from "../utils/jwt.js";
 
 export const isAuthenticated = async (req, res, next) => {
-  const token = req.headers["x-access-token"];
+  // const token = req.headers["x-access-token"];
+  const token = req.cookies?.token;
 
   if (!token) {
     return res.status(404).json({
       success: false,
-      message: "token is required",
+      message: "Unauthorized",
     });
   }
 

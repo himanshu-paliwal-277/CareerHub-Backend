@@ -1,6 +1,7 @@
 import express from "express";
 import { isAuthenticated } from "../../middleware/authMiddleware.js";
 import {
+  countTotalApplicationsController,
   createApplicationController,
   getAllApplicationController,
   getApplicationController,
@@ -19,6 +20,7 @@ router.post(
   validate(zodApplicationSchema),
   createApplicationController
 );
+router.get("/totalCount", isAuthenticated, countTotalApplicationsController);
 router.get("/", isAuthenticated, getAllApplicationController);
 router.get(
   "/company/:companyId",

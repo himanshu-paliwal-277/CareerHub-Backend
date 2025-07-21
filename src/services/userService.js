@@ -50,11 +50,16 @@ export const signinUserService = async (userDetails) => {
       role: user.role || "user",
     });
 
-    return {
-      userId: user._id,
+    const userData = {
+      _id: user._id,
       name: user.name,
       email: user.email,
-      token: token,
+      role: user.role || "user",
+    };
+
+    return {
+      user: userData,
+      token,
     };
   } catch (error) {
     console.log(error);

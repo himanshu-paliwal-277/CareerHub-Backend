@@ -68,3 +68,14 @@ export const updateApplicationService = async (id, updatedApplication) => {
     throw error;
   }
 };
+
+
+export const countTotalApplicationsService = async (userId) => {
+  try {
+    const totalApplications = await countTotalApplications(userId, "All");
+    return totalApplications;
+  } catch (error) {
+    console.error("Error in countTotalApplicationsService:", error);
+    throw error;
+  }
+};

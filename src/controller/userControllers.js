@@ -1,3 +1,4 @@
+import { success } from "zod/v4";
 import {
   signupUserService,
   signinUserService,
@@ -37,10 +38,19 @@ export async function signup(req, res) {
 export async function signin(req, res) {
   try {
     const response = await signinUserService(req.body);
+
+    // Set token in HTTP-only cookie
+    res.cookie("token", response.token, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === "production", // send over HTTPS only in prod
+      sameSite: "Strict",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+
     return res.status(200).json({
       success: true,
       message: "User signed in successfully",
-      data: response,
+      data: response.user,
     });
   } catch (error) {
     console.log(error);
@@ -56,3 +66,39 @@ export async function signin(req, res) {
     });
   }
 }
+
+export const logoutUserController = (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+    });
+    return res
+      .status(200)
+      .json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export const getUserController = (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    return res.status(200).json({ success: true, user: req.user });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};

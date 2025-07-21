@@ -1,4 +1,5 @@
 import {
+  countTotalCompaniesService,
   createCompanyService,
   deleteCompanyService,
   findAllCompanyService,
@@ -145,5 +146,22 @@ export const updateCompanyController = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const countTotalCompaniesController = async (req, res) => {
+  try {
+    const totalCompanies = await countTotalCompaniesService();
+    return res.status(200).json({
+      success: true,
+      message: "Total companies fetched successfully",
+      data: { totalCompanies: totalCompanies },
+    });
+  } catch (error) {
+    console.error("Error in countTotalCompaniesController:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };

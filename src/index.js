@@ -3,14 +3,19 @@ import connectDB from "./config/dbConfig.js";
 import { PORT } from "./config/serverConfig.js";
 import apiRouter from "./routers/apiRouter.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-const allowedOrigins = ["http://localhost:3000", "https://careerhubportal.netlify.app"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://careerhubportal.netlify.app",
+];
 
 app.use(
   cors({

@@ -73,3 +73,13 @@ export const updateCompanyById = async (id, updatedCompany) => {
     throw error;
   }
 };
+
+export const getTotalCompaniesCount = async () => {
+  try {
+    const total = await Company.countDocuments();
+    return total;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

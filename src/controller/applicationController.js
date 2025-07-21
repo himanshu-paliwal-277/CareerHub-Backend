@@ -1,5 +1,6 @@
 import { response } from "express";
 import {
+  countTotalApplicationsService,
   createApplicationService,
   getAllApplicationService,
   getApplicationInCompanyService,
@@ -94,13 +95,10 @@ export const updateApplicationController = async (req, res) => {
   try {
     const applicationId = req.params.id;
     const updatedApplication = req.body;
-    console.log("updated application = ", updatedApplication);
-    console.log("application id = ", applicationId);
     const response = await updateApplicationService(
       applicationId,
       updatedApplication
     );
-    console.log("response = ", response);
     return res.status(200).json({
       success: true,
       message: "Application updated successfully",
@@ -117,5 +115,23 @@ export const updateApplicationController = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const countTotalApplicationsController = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const totalApplications = await countTotalApplicationsService(userId);
+    return res.status(200).json({
+      success: true,
+      message: "Total applications fetched successfully",
+      data: { totalApplications: totalApplications },
+    });
+  } catch (error) {
+    console.error("Error in countTotalApplicationsController:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };
