@@ -3,6 +3,7 @@ import {
   signupUserService,
   signinUserService,
 } from "../services/userService.js";
+import { NODE_ENV } from "../config/serverConfig.js";
 
 export async function signup(req, res) {
   try {
@@ -42,7 +43,7 @@ export async function signin(req, res) {
     // Set token in HTTP-only cookie
     res.cookie("token", response.token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // send over HTTPS only in prod
+      secure: NODE_ENV === "production", // send over HTTPS only in prod
       sameSite: "Strict",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
@@ -71,7 +72,7 @@ export const logoutUserController = (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: NODE_ENV === "production",
       sameSite: "Strict",
     });
     return res
