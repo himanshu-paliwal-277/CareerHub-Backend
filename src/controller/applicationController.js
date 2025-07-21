@@ -121,7 +121,8 @@ export const updateApplicationController = async (req, res) => {
 export const countTotalApplicationsController = async (req, res) => {
   try {
     const userId = req.user._id;
-    const totalApplications = await countTotalApplicationsService(userId);
+    const status = req.query.status || "All";
+    const totalApplications = await countTotalApplicationsService(userId, status);
     return res.status(200).json({
       success: true,
       message: "Total applications fetched successfully",

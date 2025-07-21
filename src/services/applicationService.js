@@ -70,9 +70,9 @@ export const updateApplicationService = async (id, updatedApplication) => {
 };
 
 
-export const countTotalApplicationsService = async (userId) => {
+export const countTotalApplicationsService = async (userId, status) => {
   try {
-    const totalApplications = await countTotalApplications(userId, "All");
+    const totalApplications = await countTotalApplications(userId, status);
     return totalApplications;
   } catch (error) {
     console.error("Error in countTotalApplicationsService:", error);

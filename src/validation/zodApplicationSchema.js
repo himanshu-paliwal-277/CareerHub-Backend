@@ -8,7 +8,15 @@ export const zodApplicationSchema = z.object({
     .length(24, { message: "Invalid Company ObjectId" }),
 
   status: z.enum(
-    ["Not Applied", "Applied", "Shortlisted", "Interview", "Offer", "Rejected"],
+    [
+      "Not Applied",
+      "Applied",
+      "Shortlisted",
+      "Interview",
+      "Offer",
+      "Rejected",
+      "Cleared",
+    ],
     {
       required_error: "Status is required",
     }

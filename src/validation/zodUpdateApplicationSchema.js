@@ -2,7 +2,15 @@ import { z } from "zod";
 
 export const zodUpdateApplicationSchema = z.object({
   status: z.enum(
-    ["Not Applied", "Applied", "Shortlisted", "Interview", "Offer", "Rejected"],
+    [
+      "Not Applied",
+      "Applied",
+      "Shortlisted",
+      "Interview",
+      "Offer",
+      "Rejected",
+      "Cleared",
+    ],
     {
       required_error: "Status is required",
     }
