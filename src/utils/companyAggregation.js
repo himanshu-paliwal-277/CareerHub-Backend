@@ -6,6 +6,7 @@ export const buildCompanyAggregationPipeline = ({
   search = "",
   location = "",
   tags = [],
+  applicationStatus = "all",
   sortBy = "createdAt",
   sortOrder = "desc",
   userId,
@@ -25,16 +26,12 @@ export const buildCompanyAggregationPipeline = ({
       tags: { $regex: new RegExp(`^${tag.trim()}$`, "i") },
     }));
   }
+
   const userObjectId = new mongoose.Types.ObjectId(userId);
 
   const pipeline = [
     { $match: filter },
-
     { $sort: { [sortBy]: sortOrder === "asc" ? 1 : -1 } },
-
-    { $skip: (page - 1) * limit },
-    { $limit: limit },
-
     {
       $lookup: {
         from: "users",
@@ -67,20 +64,40 @@ export const buildCompanyAggregationPipeline = ({
             cond: { $eq: ["$$app.user", userObjectId] },
           },
         },
-      },
-    },
-    {
-      $addFields: {
-        isApplied: { $gt: [{ $size: "$userApplications" }, 0] },
-      },
-    },
-    {
-      $project: {
-        userApplications: 0,
-        companyApplications: 0,
+        isApplied: {
+          $gt: [
+            {
+              $size: {
+                $filter: {
+                  input: "$companyApplications",
+                  as: "app",
+                  cond: { $eq: ["$$app.user", userObjectId] },
+                },
+              },
+            },
+            0,
+          ],
+        },
       },
     },
   ];
+
+  // Conditionally apply match based on applicationStatus
+  if (applicationStatus === "applied") {
+    pipeline.push({ $match: { isApplied: true } });
+  } else if (applicationStatus === "notApplied") {
+    pipeline.push({ $match: { isApplied: false } });
+  }
+
+  pipeline.push({
+    $project: {
+      userApplications: 0,
+      companyApplications: 0,
+    },
+  });
+
+  pipeline.push({ $skip: (page - 1) * limit });
+  pipeline.push({ $limit: limit });
 
   return pipeline;
 };

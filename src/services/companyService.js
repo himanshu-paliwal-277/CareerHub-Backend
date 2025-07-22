@@ -9,13 +9,17 @@ import {
 } from "../repository/company.js";
 
 export const createCompanyService = async (createCompanyObject) => {
-  const company = await createCompany(createCompanyObject);
-  if (!company) {
-    const error = new Error("company already exists");
-    error.status = 400;
+  try {
+    const company = await createCompany(createCompanyObject);
+    if (!company) {
+      const error = new Error("company already exists");
+      error.status = 400;
+      throw error;
+    }
+    return company;
+  } catch (error) {
     throw error;
   }
-  return company;
 };
 
 export const findAllCompanyService = async (query) => {
@@ -77,7 +81,6 @@ export const updateCompanyService = async (id, updatedCompany) => {
     throw error;
   }
 };
-
 
 export const countTotalCompaniesService = async () => {
   try {

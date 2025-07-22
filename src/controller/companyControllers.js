@@ -14,10 +14,10 @@ export const createCompanyController = async (req, res) => {
       website: req.body.website,
       linkedin: req.body.linkedin,
       location: req.body.location,
-      contactPerson: req.body.contactPerson,
       contactInfo: req.body.contactInfo,
       tags: req.body.tags,
       createdBy: req.user._id,
+      companySize: req.body.companySize,
     };
 
     const company = await createCompanyService(companyData);
@@ -35,9 +35,10 @@ export const createCompanyController = async (req, res) => {
       });
     }
     console.log(error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error",
+    });
   }
 };
 
@@ -50,6 +51,7 @@ export const findAllCompanyController = async (req, res) => {
     const sortBy = req.query.sortBy || "createdAt";
     const sortOrder = req.query.sortOrder || "desc";
     const tags = req.query.tags ? req.query.tags.split(",") : [];
+    const applicationStatus = req.query.applicationStatus || "all";
 
     const query = {
       page: parseInt(page),
@@ -59,6 +61,7 @@ export const findAllCompanyController = async (req, res) => {
       sortBy,
       sortOrder,
       tags,
+      applicationStatus,
       userId: req.user._id,
     };
 

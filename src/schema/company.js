@@ -18,13 +18,15 @@ const CompanySchema = new mongoose.Schema(
     location: {
       type: String,
     },
-    contactPerson: {
+    companySize: {
       type: String,
+      enum: ["1-10", "11-50", "51-200", "201-500", "500+"],
     },
-    contact: {
-      phone: { type: String },
+    contactInfo: {
+      contactPerson: { type: String },
+      mobile: { type: String },
       email: { type: String },
-      linkedin: { type: String },
+      linkedIn: { type: String },
     },
     tags: [String],
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "users" },

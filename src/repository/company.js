@@ -29,6 +29,8 @@ export const countTotalCompanies = async (query) => {
       search: query.search || "",
       location: query.location || "",
       tags: query.tags || [],
+      applicationStatus: query.applicationStatus || "all",
+      userId: query.userId,
     });
 
     pipeline.push({ $count: "total" });
