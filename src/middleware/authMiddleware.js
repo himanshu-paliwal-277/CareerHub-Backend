@@ -30,10 +30,13 @@ export const isAuthenticated = async (req, res, next) => {
     next();
   } catch (error) {
     console.error("Authentication error:", error);
-    return res.status(401).json({
-      success: false,
-      message: "Invalid token",
-    });
+    return res
+      .clearCookie("token") // 🔧 Clear expired/invalid token
+      .status(401)
+      .json({
+        success: false,
+        message: "Invalid or expired token",
+      });
   }
 };
 

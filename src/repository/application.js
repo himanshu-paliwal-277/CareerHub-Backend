@@ -50,10 +50,16 @@ export const getApplicationInCompany = async (companyId, userId) => {
 
 export const countTotalApplications = async (userId, status) => {
   try {
+    const statusFilter =
+      status === "All"
+        ? { status: { $exists: true } }
+        : { status: { $in: status } };
+
     const totalApplications = await Application.countDocuments({
       user: userId,
-      status: status !== "All" ? status : { $exists: true },
+      ...statusFilter,
     });
+
     return totalApplications;
   } catch (error) {
     console.log(error);
