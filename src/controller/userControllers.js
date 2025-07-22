@@ -43,8 +43,8 @@ export async function signin(req, res) {
     // Set token in HTTP-only cookie
     res.cookie("token", response.token, {
       httpOnly: true,
-      secure: true, // send over HTTPS only in prod
-      sameSite: "None",
+      secure: NODE_ENV === "production", // true only in prod
+      sameSite: NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
@@ -72,8 +72,8 @@ export const logoutUserController = (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: NODE_ENV === "production", // true only in prod
+      sameSite: NODE_ENV === "production" ? "None" : "Lax",
     });
     return res
       .status(200)
