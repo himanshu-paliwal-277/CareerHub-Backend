@@ -6,6 +6,8 @@ import {
   getAllApplicationController,
   getApplicationController,
   getApplicationInCompanyController,
+  getApplicationsStatusCountController,
+  getDailyApplicationCountsController,
   updateApplicationController,
 } from "../../controller/applicationController.js";
 import { zodApplicationSchema } from "../../validation/zodApplicationSchema.js";
@@ -21,6 +23,8 @@ router.post(
   createApplicationController
 );
 router.get("/totalCount", isAuthenticated, countTotalApplicationsController);
+router.get("/status-count", isAuthenticated, getApplicationsStatusCountController);
+router.get("/daily-count", isAuthenticated, getDailyApplicationCountsController);
 router.get("/", isAuthenticated, getAllApplicationController);
 router.get(
   "/company/:companyId",

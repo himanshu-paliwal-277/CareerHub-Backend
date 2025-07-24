@@ -5,6 +5,8 @@ import {
   getAllApplicationService,
   getApplicationInCompanyService,
   getApplicationService,
+  getApplicationsStatusCountService,
+  getDailyApplicationCountsService,
   updateApplicationService,
 } from "../services/applicationService.js";
 
@@ -136,6 +138,46 @@ export const countTotalApplicationsController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
+    });
+  }
+};
+
+export const getApplicationsStatusCountController = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const totalApplications = await getApplicationsStatusCountService(userId);
+    return res.status(200).json({
+      success: true,
+      message: "Total applications status fetched successfully",
+      data: { totalApplications: totalApplications },
+    });
+  } catch (error) {
+    console.error("Error in getApplicationsStatusCountController:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+
+export const getDailyApplicationCountsController = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+    const data = await getDailyApplicationCountsService(userId, startDate, endDate);
+
+    res.status(200).json({
+      success: true,
+      message: "Daily application counts fetched successfully",
+      data: data,
+    });
+  } catch (error) {
+    console.error("Error in getDailyApplicationCounts:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching daily counts",
     });
   }
 };

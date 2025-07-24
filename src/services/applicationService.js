@@ -4,6 +4,8 @@ import {
   getAllApplicationByUserId,
   getApplicationById,
   getApplicationInCompany,
+  getApplicationsStatusCount,
+  getDailyApplicationCounts,
   updateApplicationById,
 } from "../repository/application.js";
 
@@ -69,13 +71,31 @@ export const updateApplicationService = async (id, updatedApplication) => {
   }
 };
 
-
 export const countTotalApplicationsService = async (userId, status) => {
   try {
     const totalApplications = await countTotalApplications(userId, status);
     return totalApplications;
   } catch (error) {
     console.error("Error in countTotalApplicationsService:", error);
+    throw error;
+  }
+};
+
+export const getApplicationsStatusCountService = async (userId) => {
+  try {
+    const totalApplications = await getApplicationsStatusCount(userId);
+    return totalApplications;
+  } catch (error) {
+    console.error("Error in countTotalApplicationsService:", error);
+    throw error;
+  }
+};
+
+export const getDailyApplicationCountsService = async (userId, startDate, endDate) => {
+  try {
+    const data = await getDailyApplicationCounts(userId, startDate, endDate);
+    return data;
+  } catch (error) {
     throw error;
   }
 };
