@@ -7,18 +7,24 @@ services:
     container_name: careerhub-backend
     restart: unless-stopped
     ports:
-      - "4000:4000"
+      - "${PORT}:${PORT}"
     environment:
-      NODE_ENV: production
-      PORT: 4000
-      DB_URL: mongodb+srv://himanshu27:MkFCLzg6n5sDSfIR@cluster0.op48u.mongodb.net/careerHub
-      JWT_SECRET: himanshuPaliwal
-      PHANTOMBUSTER_API_KEY: edFyE63wQyYExzMdu6L4Lkn0WYm5VW1PUrpEOquxVdU
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${PORT}
+      DB_URL: ${DB_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      PHANTOMBUSTER_API_KEY: ${PHANTOMBUSTER_API_KEY}
     volumes:
       - ./src:/app/src
       - /app/node_modules
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000/api/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:4000/api/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})",
+        ]
       interval: 30s
       timeout: 3s
       retries: 3
