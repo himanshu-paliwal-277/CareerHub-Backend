@@ -1,9 +1,7 @@
 services:
   # Backend API Service
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: himanshu277/careerhub-backend-backend
     container_name: careerhub-backend
     restart: unless-stopped
     ports:
